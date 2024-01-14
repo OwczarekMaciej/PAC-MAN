@@ -3,9 +3,13 @@
 
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
+#include <QKeyEvent>
 
 #include "maze.h"
 #include "item.h"
+#include "entity.h"
+#include "pacman.h"
+
 
 
 class Game_view : public QGraphicsView
@@ -14,6 +18,7 @@ class Game_view : public QGraphicsView
 
 public:
     Game_view();
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     const int window_witdh = 448;
@@ -27,6 +32,7 @@ private:
     void set_text();
 
     void place_dots();
+    void place_pacman();
 
     QGraphicsScene *my_scene;
     QGraphicsTextItem *game_title;
@@ -35,6 +41,9 @@ private:
 
     Item *item[31][28];
     Maze *maze;
+
+    Pacman *pacman;
+    QTimer *pacmanTimer;
 
 };
 

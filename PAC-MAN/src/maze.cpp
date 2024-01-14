@@ -1,11 +1,11 @@
 #include "maze.h"
+#include <QDebug>
 
 Maze::Maze(QObject *parent)
     : QObject (parent)
 {
     createMaze();
 }
-
 
 void Maze::createMaze() {
     map = {
@@ -76,8 +76,12 @@ QList <QPoint> Maze::boosts()
 }
 
 bool Maze::can_entity_move(QPointF pos, QPoint direction) {
-    int x = int(pos.y() - 35) / 16;
+    int x = int(pos.y() - 15) / 16;
     int y = int(pos.x()) / 16;
+    qDebug() << pos.y() << pos.x();
+    qDebug() << x << y;
+    qDebug() << map[x][y];
+
 
     if (x + direction.y() >= 0 && x + direction.y() < 31 && y + direction.x() >= 0 && y + direction.x() < 28) {
         if (map[x + direction.y()][y + direction.x()] != 0)
@@ -105,4 +109,17 @@ void Maze::check_for_items(QPointF pos, QPoint direction)
             emit eat(QPoint(x, y));
         }
         player_dir = direction;
+}
+
+void Maze::set_location(QPoint pos, char charcter) {
+    switch (charcter) {
+    case 'a':
+        pacman = pos;
+        break;
+    }
+}
+
+void Maze::set_pacman_pos(QPointF pos) {
+
+    pacman_pos = pos;
 }

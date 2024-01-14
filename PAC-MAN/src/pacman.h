@@ -1,20 +1,21 @@
 #ifndef PACMAN_H
 #define PACMAN_H
 
-#include "entity.h"
-#include "maze.h"
-
 #include <QPixmap>
 #include <QTimer>
 
+#include "entity.h"
+#include "maze.h"
 
-class Pacman : public Entity
+class Pacman :  public QObject, public QGraphicsPixmapItem
 {
+    Q_OBJECT
 public:
     Pacman(Maze *maze_parent);
-    //~Pacman() = default;
+    ~Pacman() {};
 
-     void setDirection(QPoint dir);
+     void set_direction(QPoint dir);
+     void start();
 
 public slots:
     void move();
@@ -22,6 +23,7 @@ public slots:
 
 private:
     void set_char_img();
+    void pacman_tunnel_swap();
 
     QTimer *timer;
     QPoint direction;
@@ -33,5 +35,6 @@ private:
     int img_index = 0;
     int change_img = 1;
 };
+
 
 #endif // PACMAN_H

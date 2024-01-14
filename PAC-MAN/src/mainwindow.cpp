@@ -17,7 +17,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::set_start_screen()
 {
     setWindowTitle("WELCOME TO PAC-MAN");

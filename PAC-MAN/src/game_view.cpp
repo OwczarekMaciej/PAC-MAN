@@ -2,6 +2,9 @@
 #include "dot.h"
 #include "boost.h"
 
+#include <QPixmap>
+#include <QDebug>
+
 
 Game_view::Game_view()
 {
@@ -18,10 +21,12 @@ void Game_view::set_scene()
     my_scene->setBackgroundBrush(QPixmap(":/res/maze.png").scaledToWidth(window_witdh));
 
     setScene(my_scene);
-    maze = new Maze(this);
-    place_dots();
-
     set_text();
+    maze = new Maze(this);
+    connect(maze, SIGNAL(eat(QPoint)), this, SLOT(itemEat(QPoint)));
+
+    place_dots();
+    place_pacman();
 }
 
 void Game_view::set_text()
@@ -63,8 +68,35 @@ void Game_view::place_dots()
     list = maze->boosts();
     foreach(QPoint pos, list) {
         item[pos.x()][pos.y()] = new Boost(this);
-        item[pos.x()][pos.y()]->setPos(-6 + 16 * pos.y(), 9 + 16 * pos.x());
+        item[pos.x()][pos.y()]->setPos(-6 + 16 * pos.y(), 8 + 16 * pos.x());
         my_scene->addItem(item[pos.x()][pos.y()]);
         //connect(item[pos.x()][pos.y()], SIGNAL(dot_eaten()), this, SLOT(dotsAte()));
         }
+}
+
+void Game_view::place_pacman()
+{
+    pacman = new Pacman(maze);
+
+    pacmanTimer = new QTimer(this);
+    connect(pacmanTimer, SIGNAL(timeout()), pacman, SLOT(move()));
+    pacmanTimer->start(20);
+    pacman->start();
+
+    pacman->setPos(window_witdh / 2 - pacman->boundingRect().width() / 2 + 7 , 383);
+    //qDebug() << window_witdh / 2 - pacman->boundingRect().width() / 2 << pacman->pos().x() << pacman->pos().y();
+
+    my_scene->addItem(pacman);
+}
+
+void Game_view::keyPressEvent(QKeyEvent *event) {
+
+    if ((event->key() == Qt::Key_Up) || (event->key() == Qt::Key_W))
+        pacman->set_direction(QPoint(0, -1));
+    else if ((event->key() == Qt::Key_Down)|| (event->key() == Qt::Key_S))
+        pacman->set_direction(QPoint(0, 1));
+    else if ((event->key() == Qt::Key_Left) || (event->key() == Qt::Key_A))
+        pacman->set_direction(QPoint(-1, 0));
+    else if ((event->key() == Qt::Key_Right) || (event->key() == Qt::Key_D))
+        pacman->set_direction(QPoint(1, 0));
 }

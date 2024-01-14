@@ -19,6 +19,9 @@ public:
     bool can_entity_move(QPointF pos, QPoint direction);
 
     void check_for_items(QPointF pos, QPoint direction);
+    void set_location(QPoint pos, char charcter);
+
+    void set_pacman_pos(QPointF pos);
 
 signals:
     void eat(QPoint pos);
@@ -29,6 +32,9 @@ private:
     const int maze_hight = 31;
     QList <QList<int>> map;
     QPoint player_dir;
+
+    QPoint pacman;
+    QPointF pacman_pos;
 };
 
 #endif // MAZE_H

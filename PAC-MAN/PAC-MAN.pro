@@ -17,10 +17,10 @@ SOURCES += \
     src/maze.cpp \
     src/pacman.cpp
 
+
 HEADERS += \
     src/boost.h \
     src/dot.h \
-    src/entity.h \
     src/game_view.h \
     src/item.h \
     src/mainwindow.h \
