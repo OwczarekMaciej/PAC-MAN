@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>res/dot.png</file>
+        <file>res/welcome_gif.gif</file>
+        <file>res/font.ttf</file>
+        <file>res/maze.png</file>
+        <file>res/boost.png</file>
+        <file>res/pacman1.png</file>
+        <file>res/pacman2.png</file>
+        <file>res/pacman3.png</file>
+        <file>res/dead/0.png</file>
+        <file>res/dead/1.png</file>
+        <file>res/dead/2.png</file>
+        <file>res/dead/3.png</file>
+        <file>res/dead/4.png</file>
+        <file>res/dead/5.png</file>
+        <file>res/dead/6.png</file>
+        <file>res/dead/7.png</file>
+        <file>res/dead/8.png</file>
+        <file>res/dead/9.png</file>
+        <file>res/dead/10.png</file>
+    </qresource>
+</RCC>
