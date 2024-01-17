@@ -23,7 +23,7 @@ void Game_view::set_scene()
     setScene(my_scene);
     set_text();
     maze = new Maze(this);
-    connect(maze, SIGNAL(eat(QPoint)), this, SLOT(itemEat(QPoint)));
+    connect(maze, SIGNAL(dot_eaten(QPoint)), this, SLOT(collected_item(QPoint)));
 
     place_dots();
     place_pacman();
@@ -52,6 +52,25 @@ void Game_view::set_text()
     score->setPos(115, -25);
     my_scene->addItem(score);
 
+    winner_text1 = new QGraphicsTextItem();
+    winner_text1->setPlainText("CONGRATULATIONS!");
+    winner_text1->setDefaultTextColor(Qt::red);
+    winner_text1->setFont(QFont(font_family, winner_font_size));
+    winner_text1->setPos(window_witdh/2 - winner_text1->boundingRect().width()/2,
+                        window_height/2 - winner_text1->boundingRect().height()/2 - 50);
+    winner_text2 = new QGraphicsTextItem();
+    winner_text2->setPlainText("YOU WON!");
+    winner_text2->setDefaultTextColor(Qt::red);
+    winner_text2->setFont(QFont(font_family, winner_font_size));
+    winner_text2->setPos(window_witdh/2 - winner_text2->boundingRect().width()/2,
+                        window_height/2 - winner_text2->boundingRect().height()/2);
+
+
+    my_scene->addItem(winner_text1);
+    my_scene->addItem(winner_text2);
+    winner_text1->hide();
+    winner_text2->hide();
+
 }
 
 void Game_view::place_dots()
@@ -62,7 +81,7 @@ void Game_view::place_dots()
         item[pos.x()][pos.y()] = new Dot(this);
         item[pos.x()][pos.y()]->setPos(16 * pos.y(), 15 + 16 * pos.x());
         my_scene->addItem(item[pos.x()][pos.y()]);
-        //connect(item[pos.x()][pos.y()], SIGNAL(dot_eaten()), this, SLOT(dotsAte()));
+        connect(item[pos.x()][pos.y()], SIGNAL(dot_eaten()), this, SLOT(dot_collected()));
     }
 
     list = maze->boosts();
@@ -70,8 +89,9 @@ void Game_view::place_dots()
         item[pos.x()][pos.y()] = new Boost(this);
         item[pos.x()][pos.y()]->setPos(-6 + 16 * pos.y(), 8 + 16 * pos.x());
         my_scene->addItem(item[pos.x()][pos.y()]);
-        //connect(item[pos.x()][pos.y()], SIGNAL(dot_eaten()), this, SLOT(dotsAte()));
-        }
+        connect(item[pos.x()][pos.y()], SIGNAL(boost_eaten()), this, SLOT(dot_collected()));
+
+    }
 }
 
 void Game_view::place_pacman()
@@ -80,13 +100,21 @@ void Game_view::place_pacman()
 
     pacmanTimer = new QTimer(this);
     connect(pacmanTimer, SIGNAL(timeout()), pacman, SLOT(move()));
-    pacmanTimer->start(20);
+    pacmanTimer->start(10);
     pacman->start();
 
-    pacman->setPos(window_witdh / 2 - pacman->boundingRect().width() / 2 + 7 , 383);
-    //qDebug() << window_witdh / 2 - pacman->boundingRect().width() / 2 << pacman->pos().x() << pacman->pos().y();
+    pacman->setPos(pacman->pacman_start_pos_x * 16 + 8, pacman->pacman_start_pos_y * 16 + 15);
+    qDebug() << window_witdh / 2 - pacman->boundingRect().width() / 2 << pacman->pos().x() << pacman->pos().y();
 
     my_scene->addItem(pacman);
+
+    blinky = new Blinky(maze);
+    ghostMove = new QTimer(this);
+    connect(ghostMove, SIGNAL(timeout()), blinky, SLOT(move()));
+    ghostMove->start(11);
+    blinky->setPos(16 ,16+ 15);
+    my_scene->addItem(blinky);
+
 }
 
 void Game_view::keyPressEvent(QKeyEvent *event) {
@@ -99,4 +127,27 @@ void Game_view::keyPressEvent(QKeyEvent *event) {
         pacman->set_direction(QPoint(-1, 0));
     else if ((event->key() == Qt::Key_Right) || (event->key() == Qt::Key_D))
         pacman->set_direction(QPoint(1, 0));
+}
+
+void Game_view::collected_item(QPoint pos) {
+    item[pos.x()][pos.y()]->eaten();
+}
+
+void Game_view::dot_collected()
+{
+    current_score += 10;
+    score->setPlainText(QString::number(current_score));
+    dots_left--;
+    check_for_win();
+}
+
+void Game_view::check_for_win()
+{
+    if(dots_left == 0)
+    {
+        qDebug() << "WIN";
+        winner_text1->show();
+        winner_text2->show();
+        pacmanTimer->stop();
+    }
 }

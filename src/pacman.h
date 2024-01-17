@@ -4,22 +4,25 @@
 #include <QPixmap>
 #include <QTimer>
 
-#include "entity.h"
 #include "maze.h"
+#include "entity.h"
 
-class Pacman :  public QObject, public QGraphicsPixmapItem
+class Pacman :  public Entity
 {
     Q_OBJECT
 public:
     Pacman(Maze *maze_parent);
-    ~Pacman() {};
 
      void set_direction(QPoint dir);
      void start();
+     void die();
+
+     const int pacman_start_pos_y = 23;
+     const int pacman_start_pos_x = 13;
 
 public slots:
     void move();
-    void switchAnimations();
+    void switch_animations();
 
 private:
     void set_char_img();
@@ -34,6 +37,11 @@ private:
     bool is_dead;
     int img_index = 0;
     int change_img = 1;
+
+    const int left_boundary = -30;
+    const int right_boundary = 478;
+
+    bool dead;
 };
 
 

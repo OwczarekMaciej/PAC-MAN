@@ -78,20 +78,20 @@ QList <QPoint> Maze::boosts()
 bool Maze::can_entity_move(QPointF pos, QPoint direction) {
     int x = int(pos.y() - 15) / 16;
     int y = int(pos.x()) / 16;
-    qDebug() << pos.y() << pos.x();
-    qDebug() << x << y;
-    qDebug() << map[x][y];
+    //qDebug() << pos.y() << pos.x();
+    //qDebug() << x << y;
+    //qDebug() << map[x][y];
 
 
-    if (x + direction.y() >= 0 && x + direction.y() < 31 && y + direction.x() >= 0 && y + direction.x() < 28) {
+    if (x + direction.y() >= 0 && x + direction.y() < maze_hight && y + direction.x() >= 0 && y + direction.x() < maze_width) {
         if (map[x + direction.y()][y + direction.x()] != 0)
             return true;
         else
             return false;
     }
-    else if (x == 14 && y + direction.x() < 0)
+    else if (x == tunnel_level && y + direction.x() < 0)
         return true;
-    else if (x == 14 && y + direction.x() > 27)
+    else if (x == tunnel_level && y + direction.x() > maze_width - 1)
         return true;
     return false;
 
@@ -99,22 +99,28 @@ bool Maze::can_entity_move(QPointF pos, QPoint direction) {
 
 void Maze::check_for_items(QPointF pos, QPoint direction)
 {
-    int x = int(pos.y() - 35) / 16;
-        int y = int(pos.x()) / 16;
+    int x = int(pos.y() - 15) / 16;
+    int y = int(pos.x()) / 16;
 
-        if (map[x][y] != 0 && map[x][y] != -1) {
-            if (map[x][y] == 2)
-                emit boost_ability();
-            map[x][y] = -1;
-            emit eat(QPoint(x, y));
+    if (map[x][y] != 0 && map[x][y] != 3) {
+        if (map[x][y] == 1) {
+            emit dot_eaten(QPoint(x, y));
+            map[x][y] = 3;
+        } else if (map[x][y] == 2) {
+            emit boost_ability();
+            map[x][y] = 3;
         }
-        player_dir = direction;
+    }
+    pacman_dir = direction;
 }
 
 void Maze::set_location(QPoint pos, char charcter) {
     switch (charcter) {
     case 'a':
         pacman = pos;
+        break;
+    case 'b':
+        blinky = pos;
         break;
     }
 }
@@ -123,3 +129,41 @@ void Maze::set_pacman_pos(QPointF pos) {
 
     pacman_pos = pos;
 }
+
+bool Maze::are_dots_collected() {
+    int dots_left = 0;
+    for (int i = 0; i < maze_hight; i++) {
+        for (int j = 0; j < maze_width; j++) {
+            if (map[i][j] == 1) {
+                dots_left++;
+
+            }
+        }
+    }qDebug() << dots_left;
+    for (int i = 0; i < maze_hight; i++) {
+        for (int j = 0; j < maze_width; j++) {
+            if (map[i][j] == 1) {
+                qDebug() << i << j;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+QPointF Maze::get_pacman_pos() {
+    return pacman_pos;
+}
+
+void Maze::setPos(QPointF pos) {
+    pacman_pos = pos;
+}
+
+QPoint Maze::get_pacman_loc(){
+    return pacman;
+}
+
+QPoint Maze::get_pacman_dir() {
+    return pacman_dir;
+}
+

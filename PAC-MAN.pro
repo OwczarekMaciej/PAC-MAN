@@ -10,8 +10,10 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
+    src/blinky.cpp \
     src/boost.cpp \
     src/dot.cpp \
+    src/enemy.cpp \
     src/game_view.cpp \
     src/mainwindow.cpp \
     src/maze.cpp \
@@ -19,9 +21,12 @@ SOURCES += \
 
 
 HEADERS += \
+    src/blinky.h \
     src/boost.h \
     src/dot.h \
+    src/enemy.h \
     src/game_view.h \
+    src/entity.h \
     src/item.h \
     src/mainwindow.h \
     src/maze.h \

@@ -19,5 +19,21 @@
         <file>res/dead/8.png</file>
         <file>res/dead/9.png</file>
         <file>res/dead/10.png</file>
+	<file>res/ghost/boost/boost01.png</file>
+	<file>res/ghost/boost/boost02.png</file>
+	<file>res/ghost/boost/boost11.png</file>
+	<file>res/ghost/boost/boost12.png</file>
+	<file>res/ghost/dead/0.png</file>
+	<file>res/ghost/dead/1.png</file>
+	<file>res/ghost/dead/2.png</file>
+	<file>res/ghost/dead/3.png</file>
+	<file>res/ghost/blinky/d1.png</file>
+	<file>res/ghost/blinky/d2.png</file>
+	<file>res/ghost/blinky/r1.png</file>
+	<file>res/ghost/blinky/r2.png</file>
+	<file>res/ghost/blinky/l1.png</file>
+	<file>res/ghost/blinky/l2.png</file>
+	<file>res/ghost/blinky/u1.png</file>
+	<file>res/ghost/blinky/u2.png</file>
     </qresource>
 </RCC>
