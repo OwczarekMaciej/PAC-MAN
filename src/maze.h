@@ -25,10 +25,13 @@ public:
     void set_pacman_pos(QPointF pos);
     QPointF get_pacman_pos();
 
-    bool are_dots_collected();
     QPoint get_pacman_loc();
     QPoint get_pacman_dir();
 
+    QPoint get_blinky_loc();
+    QPoint get_clyde_loc();
+
+    QList <QList<int>> map;
 signals:
     void dot_eaten(QPoint pos);
     void boost_ability();
@@ -39,10 +42,10 @@ private:
     const int maze_hight = 31;
     const int tunnel_level = 14;
 
-    QList <QList<int>> map;
+
     QPoint pacman_dir;
 
-    QPoint pacman, blinky;
+    QPoint pacman, blinky, clyde;
     QPointF pacman_pos;
 
     bool nerf;

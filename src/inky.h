@@ -1,5 +1,5 @@
-#ifndef BLINKY_H
-#define BLINKY_H
+#ifndef INKY_H
+#define INKY_H
 
 #include <QTimer>
 #include <QObject>
@@ -9,10 +9,10 @@
 #include "enemy.h"
 #include "maze.h"
 
-class Blinky: public Enemy {
+class Inky: public Enemy {
     Q_OBJECT
 public:
-    Blinky(Maze *maze_parent);
+    Inky(Maze *maze_parent);
     QPoint chase_strategy();
     char ghost_char();
     int enemy_base_time();
@@ -21,4 +21,6 @@ private:
     Maze *maze;
 };
 
-#endif // BLINKY_H
+
+
+#endif // INKY_H

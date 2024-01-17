@@ -11,7 +11,6 @@ Game_view::Game_view()
     setWindowTitle("PAC_MAN");
     setFixedSize(window_witdh+5, window_height);
     set_scene();
-
 }
 
 void Game_view::set_scene()
@@ -27,6 +26,7 @@ void Game_view::set_scene()
 
     place_dots();
     place_pacman();
+    place_ghosts();
 }
 
 void Game_view::set_text()
@@ -89,8 +89,7 @@ void Game_view::place_dots()
         item[pos.x()][pos.y()] = new Boost(this);
         item[pos.x()][pos.y()]->setPos(-6 + 16 * pos.y(), 8 + 16 * pos.x());
         my_scene->addItem(item[pos.x()][pos.y()]);
-        connect(item[pos.x()][pos.y()], SIGNAL(boost_eaten()), this, SLOT(dot_collected()));
-
+        connect(item[pos.x()][pos.y()], SIGNAL(boost_eaten()), this, SLOT(boost_collected()));
     }
 }
 
@@ -105,16 +104,43 @@ void Game_view::place_pacman()
 
     pacman->setPos(pacman->pacman_start_pos_x * 16 + 8, pacman->pacman_start_pos_y * 16 + 15);
     qDebug() << window_witdh / 2 - pacman->boundingRect().width() / 2 << pacman->pos().x() << pacman->pos().y();
+    maze->set_location(QPoint(pacman->pacman_start_pos_y, pacman->pacman_start_pos_x), 'a');
 
     my_scene->addItem(pacman);
+}
 
+void Game_view::place_ghosts()
+{
     blinky = new Blinky(maze);
     ghostMove = new QTimer(this);
     connect(ghostMove, SIGNAL(timeout()), blinky, SLOT(move()));
-    ghostMove->start(11);
-    blinky->setPos(16 ,16+ 15);
+    ghostMove->start(10);
+    //blinky->setPos(13 * 16, 11 * 16 + 15);
+    blinky->setPos(13 * 16, 14 * 16 + 15);
     my_scene->addItem(blinky);
+    connect(blinky, SIGNAL(game_over()), this, SLOT(game_end()));
+    blinky->start();
 
+    clyde = new Clyde(maze);
+    connect(ghostMove, SIGNAL(timeout()), clyde, SLOT(move()));
+    clyde->setPos(14 * 16, 14 * 16 + 15);
+    my_scene->addItem(clyde);
+    connect(clyde, SIGNAL(game_over()), this, SLOT(game_end()));
+    clyde->start();
+
+    pinky = new Pinky(maze);
+    connect(ghostMove, SIGNAL(timeout()), pinky, SLOT(move()));
+    pinky->setPos(14 * 16, 13 * 16 + 15);
+    my_scene->addItem(pinky);
+    connect(pinky, SIGNAL(game_over()), this, SLOT(game_end()));
+    pinky->start();
+
+    inky = new Inky(maze);
+    connect(ghostMove, SIGNAL(timeout()), inky, SLOT(move()));
+    inky->setPos(13 * 16, 13 * 16 + 15);
+    my_scene->addItem(inky);
+    connect(inky, SIGNAL(game_over()), this, SLOT(game_end()));
+    inky->start();
 }
 
 void Game_view::keyPressEvent(QKeyEvent *event) {
@@ -141,6 +167,14 @@ void Game_view::dot_collected()
     check_for_win();
 }
 
+void Game_view::boost_collected()
+{
+    current_score += 100;
+    score->setPlainText(QString::number(current_score));
+    dots_left--;
+    check_for_win();
+}
+
 void Game_view::check_for_win()
 {
     if(dots_left == 0)
@@ -149,5 +183,17 @@ void Game_view::check_for_win()
         winner_text1->show();
         winner_text2->show();
         pacmanTimer->stop();
+        ghostMove->stop();
     }
+}
+
+void Game_view::game_end()
+{
+    pacman->die();
+    pacmanTimer->stop();
+
+    winner_text1->setPlainText("GAME OVER!");
+    winner_text1->setPos(window_witdh/2 - 130,
+                        window_height/2 - winner_text1->boundingRect().height()/2 - 50);
+    winner_text1->show();
 }

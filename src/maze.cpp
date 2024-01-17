@@ -108,6 +108,7 @@ void Maze::check_for_items(QPointF pos, QPoint direction)
             map[x][y] = 3;
         } else if (map[x][y] == 2) {
             emit boost_ability();
+            emit dot_eaten(QPoint(x, y));
             map[x][y] = 3;
         }
     }
@@ -122,6 +123,9 @@ void Maze::set_location(QPoint pos, char charcter) {
     case 'b':
         blinky = pos;
         break;
+    case 'c':
+        clyde = pos;
+        break;
     }
 }
 
@@ -130,26 +134,6 @@ void Maze::set_pacman_pos(QPointF pos) {
     pacman_pos = pos;
 }
 
-bool Maze::are_dots_collected() {
-    int dots_left = 0;
-    for (int i = 0; i < maze_hight; i++) {
-        for (int j = 0; j < maze_width; j++) {
-            if (map[i][j] == 1) {
-                dots_left++;
-
-            }
-        }
-    }qDebug() << dots_left;
-    for (int i = 0; i < maze_hight; i++) {
-        for (int j = 0; j < maze_width; j++) {
-            if (map[i][j] == 1) {
-                qDebug() << i << j;
-                return false;
-            }
-        }
-    }
-    return true;
-}
 
 QPointF Maze::get_pacman_pos() {
     return pacman_pos;
@@ -165,5 +149,15 @@ QPoint Maze::get_pacman_loc(){
 
 QPoint Maze::get_pacman_dir() {
     return pacman_dir;
+}
+
+QPoint Maze::get_blinky_loc()
+{
+    return blinky;
+}
+
+QPoint Maze::get_clyde_loc()
+{
+    return clyde;
 }
 

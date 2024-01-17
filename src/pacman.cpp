@@ -13,10 +13,14 @@ Pacman::Pacman(Maze *maze_parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(switch_animations()));
     timer->setInterval(50);
 
+    dead_timer = new QTimer();
+    connect(dead_timer, SIGNAL(timeout()), this, SLOT(dead_animations()));
+    dead_timer->setInterval(100);
+
     maze = maze_parent;
-    //maze->set_location(QPoint(14, 16), 'a');
 
     is_dead = false;
+    speed = 2;
 }
 
 void Pacman::set_char_img()
@@ -28,7 +32,7 @@ void Pacman::set_char_img()
     setPixmap(images[0]);
     setTransformOriginPoint(boundingRect().width() / 2 - 7, boundingRect().height() / 2 - 7);
 
-    for (int i = 0; i < 3; i ++) {
+    for (int i = 0; i < 11; i ++) {
         dead_img[i].load(":res/dead/" + QString::number(i) + ".png");
         dead_img[i] = dead_img[i].scaledToHeight(30);
     }
@@ -41,16 +45,17 @@ void Pacman::switch_animations() {
         if (img_index >= 2 || img_index <= 0)
             change_img = -change_img;
     }
-    else {
-        if (img_index < 11) {
-            setPixmap(dead_img[img_index]);
-            img_index += change_img;
-        }
-        else if (img_index >= 11) {
-            timer->stop();
-            is_dead = false;
-            hide();
-        }
+}
+
+void Pacman::dead_animations()
+{
+    if (img_index < 11) {
+        setPixmap(dead_img[img_index]);
+        img_index += 1;
+    }
+    else if (img_index >= 11) {
+        //dead_timer->stop();
+        hide();
     }
 }
 
@@ -68,6 +73,7 @@ void Pacman::set_direction(QPoint dir)
 
 void Pacman::move()
 {
+    //qDebug() << pos().y() << pos().x();
     maze->set_pacman_pos(pos());
 
     if (y() == 239. && (x() < 0 || x() >= 448))
@@ -92,7 +98,7 @@ void Pacman::move()
         else if (maze->can_entity_move(pos(), direction))
         {
             maze->check_for_items(pos(), direction);
-            setPos(pos() + direction * 2);
+            setPos(pos() + direction * speed);
             timer->start();
         }
         else
@@ -103,7 +109,7 @@ void Pacman::move()
         }
     }
     else
-        setPos(pos() + direction * 2);
+        setPos(pos() + direction * speed);
 }
 
 void Pacman::start() {
@@ -128,7 +134,12 @@ void Pacman::pacman_tunnel_swap()
 
 void Pacman::die()
 {
-    qDebug() << "die";
-    dead = true;
-    timer->stop();
+    if(!is_dead)
+    {
+        qDebug() << "die";
+        timer->stop();
+        dead_timer->start();
+        img_index = 0;
+        is_dead = true;
+    }
 }

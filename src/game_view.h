@@ -10,6 +10,9 @@
 #include "entity.h"
 #include "pacman.h"
 #include "blinky.h"
+#include "clyde.h"
+#include "pinky.h"
+#include "inky.h"
 
 
 class Game_view : public QGraphicsView
@@ -24,21 +27,20 @@ private:
     const int window_witdh = 448;
     const int window_height = 580;
 
-
-
     int title_font_size = 16;
     int score_font_size = 16;
     int winner_font_size = 20;
     const QString font_family = "Emulogic";
 
     int current_score = 0;
-    int dots_left = 252;
+    int dots_left = 256;
 
     void set_scene();
     void set_text();
 
     void place_dots();
     void place_pacman();
+    void place_ghosts();
     void check_for_win();
 
     QGraphicsScene *my_scene;
@@ -52,13 +54,15 @@ private:
     Maze *maze;
 
     Pacman *pacman;
-    Blinky *blinky;
+    Enemy *blinky, *clyde, *pinky, *inky;
     QTimer *pacmanTimer, *ghostMove;
+
 
 public slots:
     void collected_item(QPoint pos);
     void dot_collected();
-
+    void boost_collected();
+    void game_end();
 };
 
 

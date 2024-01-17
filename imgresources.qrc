@@ -35,5 +35,29 @@
 	<file>res/ghost/blinky/l2.png</file>
 	<file>res/ghost/blinky/u1.png</file>
 	<file>res/ghost/blinky/u2.png</file>
+	<file>res/ghost/clyde/d1.png</file>
+	<file>res/ghost/clyde/d2.png</file>
+	<file>res/ghost/clyde/r1.png</file>
+	<file>res/ghost/clyde/r2.png</file>
+	<file>res/ghost/clyde/l1.png</file>
+	<file>res/ghost/clyde/l2.png</file>
+	<file>res/ghost/clyde/u1.png</file>
+	<file>res/ghost/clyde/u2.png</file>
+	<file>res/ghost/pinky/d1.png</file>
+	<file>res/ghost/pinky/d2.png</file>
+	<file>res/ghost/pinky/r1.png</file>
+	<file>res/ghost/pinky/r2.png</file>
+	<file>res/ghost/pinky/l1.png</file>
+	<file>res/ghost/pinky/l2.png</file>
+	<file>res/ghost/pinky/u1.png</file>
+	<file>res/ghost/pinky/u2.png</file>
+	<file>res/ghost/inky/d2.png</file>
+	<file>res/ghost/inky/d1.png</file>
+	<file>res/ghost/inky/r1.png</file>
+	<file>res/ghost/inky/r2.png</file>
+	<file>res/ghost/inky/l1.png</file>
+	<file>res/ghost/inky/l2.png</file>
+	<file>res/ghost/inky/u1.png</file>
+	<file>res/ghost/inky/u2.png</file>
     </qresource>
 </RCC>

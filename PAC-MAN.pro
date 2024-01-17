@@ -12,25 +12,31 @@ SOURCES += \
     main.cpp \
     src/blinky.cpp \
     src/boost.cpp \
+    src/clyde.cpp \
     src/dot.cpp \
     src/enemy.cpp \
     src/game_view.cpp \
+    src/inky.cpp \
     src/mainwindow.cpp \
     src/maze.cpp \
-    src/pacman.cpp
+    src/pacman.cpp \
+    src/pinky.cpp
 
 
 HEADERS += \
     src/blinky.h \
     src/boost.h \
+    src/clyde.h \
     src/dot.h \
     src/enemy.h \
     src/game_view.h \
     src/entity.h \
+    src/inky.h \
     src/item.h \
     src/mainwindow.h \
     src/maze.h \
-    src/pacman.h
+    src/pacman.h \
+    src/pinky.h
 
 FORMS += \
     src/mainwindow.ui
